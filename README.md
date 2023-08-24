@@ -1,9 +1,9 @@
 
 # Introduction
 
-This repository contains the code to reproduce the ExtremITA architectures that participated in all of the [EVALITA 2023](https://www.evalita.it/campaigns/evalita-2023/) challenges. We evaluated two independent monolithic models: \texttt{extremIT5}, an Encoder-Decoder model, and \texttt{extremITLLaMA} an instruction-tuned Decoder-only Large Language Model, specifically designed for handling Italian instructions. Our approach revolves around representing tasks in natural language, where we provide instructions to the model using prompts that define the expected responses.
+This repository contains the code to reproduce the ExtremITA architectures that participated in all of the [EVALITA 2023](https://www.evalita.it/campaigns/evalita-2023/) challenges. We evaluated two independent monolithic models: **extremIT5**, an Encoder-Decoder model, and **extremITLLaMA** an instruction-tuned Decoder-only Large Language Model, specifically designed for handling Italian instructions. Our approach revolves around representing tasks in natural language, where we provide instructions to the model using prompts that define the expected responses.
 
-Remarkably, our best-performing model (\texttt{extremITLLaMA}) achieved first place in 41% of the subtasks (9 out of a total of 22) and showcased top-three performance in 64% (14 out of 22). These subtasks encompass various semantic dimensions, including Affect Detection, Authorship Analysis, Computational Ethics, Named Entity Recognition, Information Extraction, and Discourse Coherence.
+Remarkably, our best-performing model (**extremITLLaMA**) achieved first place in **41%** of the subtasks (9 out of a total of 22) and showcased top-three performance in **64%** (14 out of 22). These subtasks encompass various semantic dimensions, including Affect Detection, Authorship Analysis, Computational Ethics, Named Entity Recognition, Information Extraction, and Discourse Coherence.
 
 
 # Set up environment
