@@ -42,10 +42,10 @@ These files are made of 4 columns (with a tab character as a delimiter) without 
 
 # How to train extremITLLaMA
 
-Be sure to have the 2 files above `train.txt` and `dev.txt` in the data folder, then run the following command:
+Be sure to have the 2 files above `train.txt` and `dev.txt` in the data folder, then go back to the root folder and run the following command:
 
 ```
-nohup python -u extremITLLaMA/train.py > logs/training_extremITLLaMA.out &
+nohup python -u extremITLLaMA/train.py > training_extremITLLaMA.out &
 ```
 
 By default, the script will train the extremITLLaMA for 2 epochs on the dataset you provided. For more details please consult the official paper. In the end, the model will be saved in the `models` directory.
