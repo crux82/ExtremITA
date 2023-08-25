@@ -5,8 +5,6 @@ This repository contains the code to reproduce the ExtremITA architectures that 
 
 Remarkably, **extremITLLaMA** achieved first place in **41%** of the subtasks (9 out of a total of 22) and showcased top-three performance in **64%** (14 out of 22). These subtasks encompass various semantic dimensions, including Affect Detection, Authorship Analysis, Computational Ethics, Named Entity Recognition, Information Extraction, and Discourse Coherence.
 
-# The Camelids Tree
-![tree](./docs/camelids_tree.png)
 
 # Set up the environment
 
