@@ -12,7 +12,7 @@ Create the environment and install the requirements:
 
 ```
 # create conda env
-conda create env -n extremITA python=3.9.10 -y
+conda create -n extremITA python=3.9 -y
 conda activate extremITA
 # install general dependencies
 pip install -r requirements.txt
