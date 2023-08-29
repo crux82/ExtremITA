@@ -103,3 +103,8 @@ To appear in:
   address      = {Parma, Italy}
 }
 ```
+
+# Acknowledgements
+
+This repository is based on the LLaMA model, the Self-Instruct paper, the [Standford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) repository and the [Alpaca LoRA](https://github.com/tloen/alpaca-lora) repository.  
+We thank [Andrea Santilli](https://github.com/teelinsan) for supporting initial discussion.
