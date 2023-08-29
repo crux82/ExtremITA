@@ -5,6 +5,12 @@ This repository contains the code to reproduce the ExtremITA architectures that 
 
 Remarkably, **extremITLLaMA** achieved first place in **41%** of the subtasks (9 out of a total of 22) and showcased top-three performance in **64%** (14 out of 22). These subtasks encompass various semantic dimensions, including Affect Detection, Authorship Analysis, Computational Ethics, Named Entity Recognition, Information Extraction, and Discourse Coherence.
 
+## * NEW * 
+We released the base Italian LLaMA model, called Camoscio, on huggingface: https://huggingface.co/sag-uniroma2/extremITA-Camoscio-7b   
+
+As we used the PEFT package and the LoRA technique to train the models for EVALITA, we released the adapters as well: https://huggingface.co/sag-uniroma2/extremITA-Camoscio-7b-adapters
+
+The union between the base Camoscio and its adapters gives rise to ExtremITLLaMA!
 
 # Set up the environment
 
