@@ -5,6 +5,12 @@ This repository contains the code to reproduce the ExtremITA architectures that 
 
 Remarkably, **extremITLLaMA** achieved first place in **41%** of the subtasks (9 out of a total of 22) and showcased top-three performance in **64%** (14 out of 22). These subtasks encompass various semantic dimensions, including Affect Detection, Authorship Analysis, Computational Ethics, Named Entity Recognition, Information Extraction, and Discourse Coherence.
 
+## * NEW * 
+We released the base Italian LLaMA model, called Camoscio, on huggingface: https://huggingface.co/sag-uniroma2/extremITA-Camoscio-7b   
+
+As we used the PEFT package and the LoRA technique to train the models for EVALITA, we released the adapters as well: https://huggingface.co/sag-uniroma2/extremITA-Camoscio-7b-adapters
+
+The union between the base Camoscio and its adapters gives rise to ExtremITLLaMA!
 
 # Set up the environment
 
@@ -12,26 +18,28 @@ Create the environment and install the requirements:
 
 ```
 # create conda env
-conda create env -n extremITA python=3.9.10 -y
+conda create -n extremITA python=3.9 -y
 conda activate extremITA
 # install general dependencies
 pip install -r requirements.txt
 # install LLaMA requirements
 cd extremITLLaMA
 pip install -r requirements.txt
+# install cudatoolkit
+conda install cudatoolkit
 ```
 
 # How to generate the dataset
 
-Data directory is empty as we cannot share the EVALITA data for fine-tuning. You should access each individual site from the [task page](https://www.evalita.it/campaigns/evalita-2023/tasks/) of EVALITA and request to download the data. After downloading it, put them in the associated folder: e.g., you should put the "ACTI" data in `/data/ACTI` divided by subtask.  
-Once you collected all the data you can encode them into the dataset format for our model:
+The data directory is empty as we cannot share the EVALITA data for fine-tuning. You should access each individual site from the [task page](https://www.evalita.it/campaigns/evalita-2023/tasks/) of EVALITA and request to download the data. After downloading it, put them in the associated folder: e.g., you should put the "ACTI" data in `/data/ACTI` divided by subtask.  
+Once you have collected all the data you can encode them into the dataset format for our model:
 
 ```
 python encode.py
 ```
 
-This command will generate a file for each task in the `out` directory. In order to fine-tune our models you should merge them in one single file and split into `train.txt` and `dev.txt`. In our experimentations we split with ratio 95/5.  
-These files are made of 4 columns (with a tab character as delimiter) without any header:
+This command will generate a file for each task in the `out` directory. In order to fine-tune our models you should merge them into one single file and split them into `train.txt` and `dev.txt`. In our experimentations, we split with a ratio of 95/5.  
+These files are made of 4 columns (with a tab character as a delimiter) without any header:
 - id
 - task name, from which the natural language task description is generated
 - input text
@@ -40,13 +48,13 @@ These files are made of 4 columns (with a tab character as delimiter) without an
 
 # How to train extremITLLaMA
 
-Be sure to have the 2 aforementioned files `train.txt` and `dev.txt` in the data folder, then run the following command:
+Be sure to have the 2 files above `train.txt` and `dev.txt` in the data folder, then go back to the root folder and run the following command:
 
 ```
-nohup python -u extremITLLaMA/train.py > logs/training_extremITLLaMA.out &
+nohup python -u extremITLLaMA/train.py > training_extremITLLaMA.out &
 ```
 
-By default the script will train the extremITLLaMA for 2 epochs on the whole dataset you provided. For more details please consult the official paper. In the end, the model will be saved in the `models` directory.
+By default, the script will train the extremITLLaMA for 2 epochs on the dataset you provided. For more details please consult the official paper. In the end, the model will be saved in the `models` directory.
 
 
 # Inference
@@ -55,26 +63,26 @@ To test the model we provide 1 dummy example (`task_name`, `input_text`, `expect
 
 ```python
 inputs = [
-    ["emit_a", "Caspita che meraviglia #LamicaGeniale", "gioia fiducia"],
-    ["emotivita", "Sono pazzo di te", "4.15 4.00 2.53"],
-    ["politicit", "Neanche il tempo [POLITICIAN] meravigliarsi dell'ultima assurdità, che [POLITICIAN] #[POLITICAL_PARTY] sforna un'altra proposta inutile e bislacca. L'ultima quella [POLITICIAN] bonus per i matrimoni in chiesa. Propaganda a cui le persone, impegnate con ben altre priorità, non abboccheranno. 30 anni dopo ancora in piazza Tienanmen. @user Ironia, questa sconosciuta. . Si occupi [POLITICIAN] cose più serie, Direttore. . Io mi curerò [POLITICIAN] utilizzare le virgolette [POLITICIAN] prossima volta onde evitarLe l'incombenza [POLITICIAN] commentare quel che scrive una deputata dell'opposizione mentre il governo massacra il Paese. E Lei tace. Saluti. @user Cercherò [POLITICIAN] farla uscire meglio [POLITICIAN] prossima volta. Grazie!", "donna sinistra centrosinistra"],
-    ["geolingit", "Daje", "[regione] Lazio [geo] 41.89 12.54"],
-    ["langlearn", "Io mi chiamo Silvia e ho dieci anni. Ho un fratello di quattordici anni; se pensate sia bello averne uno più grande vi sbagliate. Vorrei che il mio fratello andasse via, però non so cosa farei senza di lui. Gli voglio bene e so, anche se in realtà non lo so, che anche lui mi vuole “bene”. [SEP] I miti di ieri erano rappresentati da una favola con eroi rimasti ancora oggi famosi, mentre i miti di oggi sono persone che quando finisce la loro carriera vengono dimenticati da quasi tutti. Il mio mito in canzone e spettacolo è Selena Gomez. Anche se ora, tutti la odiano perché si è fidanzata con Justin Biber a me piace comunque e non mi importa di tutto quello che pensano gli altri. Le sue canzoni sono bellissime!", "corretto"],
-    ["haspeede", "Fondo assunzioni straordinarie ha una dotazione finanziaria rilevante #leggedibilancio", "non_odio"],
-    ["hodi_a", "@user_abcdefghij Speriamo che si caghino sotto", "non_omotransfobico"],
+    ["emit_a", "Ora siamo tutti sollevati #IMedici", "fiducia"],
+    ["emotivita", "Non pretendo che la nostra fosse stata una relazione perfetta, solo meravigliosa.", "4.0 4.0 3.3"],
+    ["politicit", "[POLITICIAN] Riforma [POLITICIAN] catasto è più tasse sulla casa per tutti. Evitiamo gli alibi delle case “fantasma” da accatastare e [POLITICIAN] quelle in centro a valore [POLITICIAN] periferia perché si possono sistemare già con [POLITICIAN] normativa ATTUALE! @politician @politician @user @politician @politician State penalizzando un settore che è trainante [POLITICIAN] PIL ed è sempre cresciuto dal dopoguerra ad oggi! stai sereno informati almeno sui lavori parlamentari: è il Governo che ha minacciato [POLITICIAN] dimettersi se non si approvava [POLITICIAN] riforma [POLITICIAN] catasto, giusto perché è solo una mappatura! Solo chi non ha Onesta intellettuale non vede MAGGIORI TASSE PER TUTTI! cioè stiamo penalizzando l’unico settore che dal dopoguerra ad oggi ha visto non solo una crescita continua ma essere trainante [POLITICIAN] PIL italiano…brillanti davvero brillanti!", "uomo destra destra"],
+    ["geolingit", "[USER] [USER] Si amico mio. Te accolli. Altro che sette. Saranno minimo na ventina a esse boni.", "[regione] Lazio [geo] 41.89 12.54"],
+    ["langlearn", "Mi chiamo Francesco ho dieci anni e frequento la scuola Sant’Agata e sto in 1 a.Sono alto circa centoquaranta centimetri. Ho capelli neri, orecchie un po a sventola ciglie lunghe, sopracciglia corte, viso ovale, un po ciccione e dei occhi neri. Quando mi arrabbio lancio tutto per aria e se proprio mi arrabbio faccio la mia casa “sottosopra” cosa che accade raramente. Io di solito mi vesto con i jeans e una camicia. [SEP] Ciao io sono Francesca vi devo raccontare un fatto strano, ora ve lo racconto. Ero a Anzio con i miei amici naturalmente c’era anche l’amico che odiavo perché a mia mamma era simpatico. Un giorno eravamo andati al mare e stavamo nuotando, a un certo punto viene un onda gigante anzi tre, perché lontano stava passando una crociera che stava andando a Ponza.", "sì"],
+    ["haspeede", "Fondo assunzioni straordinarie ha una dotazione finanziaria rilevante #leggedibilancio", "no"],
+    ["hodi_a", "@user_abcdefghij Speriamo che si caghino sotto", "no"],
     ["multifakedetective", "#flowers #lovers Fate l'amore non fate la guerra. Marc Chagall, 'Il mazzo di fiori degli amanti', 1926. #art #painting #marcchagall #NoWars https://t.co/XahcLle4SK", "probabilmente vero"],
-    ["acti_a", "Flat tax all'ungherese", "non_cospirazione"],
-    ["nermud", "Il ministro degli Esteri al commissario capo della Commissione alleata", "[ORG] Commissione alleata"],
-    ["clinkart", "Presenza nel siero di anticorpi antimembrana basale glomerulare (anti MBG); negativa la ricerca di anticorpi anti citoplasma dei neutrofili (ANCA).", "[BREL] negativa [SEP] anticorpi [EREL] [BREL] negativa [SEP] ANCA [EREL]"],
-    ["wicita", "Non sente ancora il ' peso ' della gravidanza perché l' aumento dell' addome è contenuto e i timori dei primi mesi sono ormai [BT1] superati  [ET1] . [SEP] I provvedimenti di utilizzazione possono essere adottati soltanto nei riguardi di personale che abbia [BT2] superato  [ET2] il periodo di prova.", "uguale"],
-    ["discotex_1", "In alcune persone, i sintomi possono continuare per anni. Nella maggior parte dei pazienti, questi sintomi sono seguiti da movimenti involontari e dalla comparsa di un elettroencefalogramma atipico. La maggior parte dei pazienti muore a sei mesi dall'esordio, spesso a causa di infezioni intercorrenti quali polmoniti dovute al deterioramento del riflesso della tosse. [SEP] La prima, allo stato nativo, è solubile in acqua ed è presente nelle cellule sane.", "non_coerente"]
+    ["acti_a", "Flat tax all'ungherese", "no"],
+    ["nermud", "infatti impegna per il futuro , essendo il suo vero proposito quello di stabilire chi delle persone ora lì presenti appartiene alla Venezia Giulia e chi no.", "[LOC] Venezia Giulia"],
+    ["clinkart", "Veniva documentato, inoltre, il rialzo della troponina TnT-hs (289;", "[BREL] 289 [SEP] troponina [EREL]"],
+    ["wicita", "La [BT1] faccia  [ET1] dura verso gli abusi insanabili , che questo « lifting » al condono si picca di mostrare , ha infatti dei precedenti tali da far nascere qualche diffidenza . [SEP] Si potrebbe leggere tanto dinamismo , volontà ed attivismo in questo film , ma ci sono le [BT2] facce  [ET2] , queste non mentono , anzi smascherano ogni ipocrisia .", "sì"],
+    ["discotex_1", "Potete aggiungere solo un gene? No, potete aggiungere addirittura intere vie metaboliche. Tutto questo è possibile grazie a due brillantissime genetiste. [SEP] Vorrei rassicurarvi, la maggior parte degli scienziati non vuole fare esseri umani geneticamente modificati.", "no"]
 ]
 ```
 
-Run this command for the inference: it will loop through this list (already defined in the file), will generate the linguistic description of the task and it will print the output generated by the **ExtremITLLaMA** model.
+Go back to the root folder and run this command for the inference: it will loop through this list (already defined in the file), generate the linguistic description of the task and it will print the output generated by the **ExtremITLLaMA** model.
 
 ```
-nohup python -u extremITLLaMA/inference.py > logs/inference.out &
+nohup python -u extremITLLaMA/inference.py > inference.out &
 ```
 
 
@@ -95,3 +103,8 @@ To appear in:
   address      = {Parma, Italy}
 }
 ```
+
+# Acknowledgements
+
+This repository is based on the LLaMA model, the Self-Instruct paper, the [Standford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) repository and the [Alpaca LoRA](https://github.com/tloen/alpaca-lora) repository.  
+We thank [Andrea Santilli](https://github.com/teelinsan) for supporting initial discussion.
