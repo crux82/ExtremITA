@@ -87,7 +87,6 @@ nohup python -u extremITLLaMA/inference.py > inference.out &
 
 
 # Citation
-To appear in:
 ```
 @inproceedings{hromei2023extremita,
   author       = {Claudiu Daniel Hromei and
