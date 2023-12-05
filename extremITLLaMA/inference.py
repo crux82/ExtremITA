@@ -6,7 +6,7 @@ from transformers import LlamaTokenizer, LlamaForCausalLM
 
 from utils import *
 
-parser = argparse.ArgumentParser(description='Alpaca Tagger.')
+parser = argparse.ArgumentParser(description='ExtremITA Tagger.')
 parser.add_argument('-tokenizer','--tokenizer', help='Tokenizer',default='yahma/llama-7b-hf')
 parser.add_argument('-base_model','--base_model', help='Base Model',default='sag-uniroma2/extremITA-Camoscio-7b')
 parser.add_argument('-adapters_model','--adapters_model', help='Adapters Model',default='sag-uniroma2/extremITA-Camoscio-7b-adapters')
